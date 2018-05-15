@@ -1,6 +1,5 @@
 ' Ruutu + lataaja. made by lovsan
 ' version 0.2
-' updated @ 15.5 19.54 GMT +2
 ' Choose folder to download the files into, or stream the video with VLC player. working perfectly
 ' TODO - choose folder via promt[DONE], 
 ' TODO get mediainfo of downloaded file and write an NFO.
@@ -16,7 +15,8 @@ gatlingurl = "http://gatling.nelonenmedia.fi/media-xml-cache?id=" & xmlid
 ' https://www.ruutu.fi/video/3223089 - example 3223089
 fullurl = gatlingurl
 xmltag = "CastMediaFile"
-vlcPath = "C:\Program Files (x86)\VideoLAN\VLC\vlc.exe " ' TODO - says file not found? path should be correct???
+' folder = "downloads" TODO
+' vlcPath = "C:\Program Files (x86)\VideoLAN\VLC\vlc.exe " ' TODO, says file not found? path should be correct???
 ' ffmpegPath "" TODO
 
 If xmlid = "" then wscript.Quit 1' if no ID typed, quit program
@@ -35,12 +35,10 @@ For Each Elem In xmlCol
 'wscript.Echo(Elem.firstChild.nodeValue)
 sFilePath = Elem.firstChild.nodeValue
 Next
-
-if sFilePath = Empty then
-wscript.Echo "This video cant be downloaded or streamed - DRM active"
-wscript.Quit 1
-end if	
-		
+	if sFilePath = Empty then
+	wscript.Echo "This video cant be downloaded or streamed - DRM active"
+	wscript.Quit 1
+	end if
 dim vlcd
 vlcd=inputbox("type > stream = Open with vlc player,                         type > download = Download the file", "Ruutu+ Lataaja", "download")
 If vlcd = "" then wscript.echo "Input Empty. Closing program" 'wscript.Quit 1'  if no ID typed, quit program
@@ -65,20 +63,22 @@ sTempFilePath=inputbox("Choose filename.", "Ruutu + lataaja")
  oFolder = BrowseForFolder() & "\"
 
 FilePath = oFolder & sTempFilePath & filext 
+'if (sFilePath Is Nothing) then wscript.Echo ("This video cant be downloaded or streamed - DRM active"), 1
+
 WScript.Echo "Saving To file ->" & FilePath
+
 sCommand = "ffmpeg -y -i """ + sFilePath + """ -c:v copy -c:a copy """ + FilePath + """"
 if FilePath = "" then wscript.Quit 1
 Set oShell = WScript.CreateObject("WScript.Shell")
 oShell.Run sCommand, 1, True
-wscript.Echo "file download complete - " & FilePath
-wscript.Echo "Thank you for using Ruutu+ lataaja!"
-								
+wscript.Echo "file download complete - " & FilePath' , "Ruutu + Lataaja"
+'msgbox "file download complete - " & FilePath , "Ruutu+ Lataaja" ', 1
 'Stream file with vlc player
 case "stream"
 set vlc = WScript.CreateObject("Wscript.Shell")
-'vlcCommand = "" + vlcPath + "" + sFilePath + """" ' todo, work in progress
-vlcCommand = "vlc.exe """ + sFilePath + """"
-wscript.Echo vlcCommand
+'vlcCommand = "" + vlcPath + "" + sFilePath + """" ' not working yet
+vlcCommand = "vlc.exe """ + sFilePath +""""
+'wscript.Echo vlcCommand
 'wscript.Echo "Opening playlist - " & sFilePath
 vlc.Run vlcCommand, 1, True
 End Select
