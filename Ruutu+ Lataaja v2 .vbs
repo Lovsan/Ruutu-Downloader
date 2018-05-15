@@ -16,8 +16,7 @@ gatlingurl = "http://gatling.nelonenmedia.fi/media-xml-cache?id=" & xmlid
 ' https://www.ruutu.fi/video/3223089 - example 3223089
 fullurl = gatlingurl
 xmltag = "CastMediaFile"
-' folder = "downloads" TODO
-vlcPath = "C:\Program Files (x86)\VideoLAN\VLC\vlc.exe " ' TODO, says file not found? path should be correct???
+vlcPath = "C:\Program Files (x86)\VideoLAN\VLC\vlc.exe " ' TODO - says file not found? path should be correct???
 ' ffmpegPath "" TODO
 
 If xmlid = "" then wscript.Quit 1' if no ID typed, quit program
@@ -77,8 +76,8 @@ wscript.Echo "Thank you for using Ruutu+ lataaja!"
 'Stream file with vlc player
 case "stream"
 set vlc = WScript.CreateObject("Wscript.Shell")
-vlcCommand = "" + vlcPath + "" + sFilePath + """"
-'vlcCommand = "vlc.exe """ + sFilePath +""""
+'vlcCommand = "" + vlcPath + "" + sFilePath + """" ' todo, work in progress
+vlcCommand = "vlc.exe """ + sFilePath + """"
 wscript.Echo vlcCommand
 'wscript.Echo "Opening playlist - " & sFilePath
 vlc.Run vlcCommand, 1, True
