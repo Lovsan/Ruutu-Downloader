@@ -16,7 +16,7 @@ gatlingurl = "http://gatling.nelonenmedia.fi/media-xml-cache?id=" & xmlid
 fullurl = gatlingurl
 xmltag = "CastMediaFile"
 ' folder = "downloads" TODO
-' vlcPath = "C:\Program Files (x86)\VideoLAN\VLC\vlc.exe " ' TODO, says file not found? path should be correct???
+vlcPath = "C:\Program Files (x86)\VideoLAN\VLC\vlc.exe " ' TODO, says file not found? path should be correct???
 ' ffmpegPath "" TODO
 
 If xmlid = "" then wscript.Quit 1' if no ID typed, quit program
@@ -53,6 +53,7 @@ Function BrowseForFolder()
      BrowseForFolder = oFolder.Self.Path
    End If
 End Function
+
 Select Case vlcd
 
 Case "download" 'Download the file using ffmpeg
@@ -61,10 +62,8 @@ Dim xmlCol,sFilePath, sTempFilePath, vlc, filename
 filext = ".mkv" ' you can use .ts .mp4 or .mkv
 sTempFilePath=inputbox("Choose filename.", "Ruutu + lataaja")
  oFolder = BrowseForFolder() & "\"
-
+if sTempFilePath = "" then sTempFilePath = xmlid
 FilePath = oFolder & sTempFilePath & filext 
-'if (sFilePath Is Nothing) then wscript.Echo ("This video cant be downloaded or streamed - DRM active"), 1
-
 WScript.Echo "Saving To file ->" & FilePath
 
 sCommand = "ffmpeg -y -i """ + sFilePath + """ -c:v copy -c:a copy """ + FilePath + """"
@@ -81,6 +80,7 @@ vlcCommand = "vlc.exe """ + sFilePath +""""
 'wscript.Echo vlcCommand
 'wscript.Echo "Opening playlist - " & sFilePath
 vlc.Run vlcCommand, 1, True
+
 End Select
 wscript.Echo "Thank you for using Ruutu+ lataaja!"
 ' show some info of the media after ffmpeg has executed? 'mediainfo? TODO - version 0.3
