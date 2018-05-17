@@ -6,7 +6,7 @@
 ' TODO - proper NFO file
 
 dim gatlingurl, xmlid, fullurl, xmltag, xmltag2, colNodes, xmlCol2, description, info, mediaInfoPath, appVersion, github_url
-appVersion = "0.2.2"
+appVersion = "0.2.3"
 github_url = ""
 MsgBox "Tervetuloa Ruutu+ Lataajaan. Kopioi numerosarja linkin lopusta, minka haluat ladata.", ,"Ruutu+ Lataaja" 
 
@@ -98,8 +98,8 @@ Set outFile = fso.CreateTextFile(nfoFile, True)
 
 ' TODO - Figure how to get the show description and program name out of the xmlfile grrrr!!!!
 ' TODO - add some mediainfo into the .nfo
+outFile.WriteLine("Program name: ") & program_name							
 outFile.WriteLine("Description: ") & description
-outFile.WriteLine("Program name: ") & program_name
 outFile.WriteLine("File Name: ") & sTempFilePath & filext
 outFile.WriteLine("")
 outFile.WriteLine("-----Mediainfo -----")
@@ -198,6 +198,7 @@ encode.Run encodeCommand2, 1,True
 End if
 End Select
 createLog() 'comment this line this disable creation of NFO file.
+'playFile() ' uncomment this to play the file once download or stream is finished.
 wscript.Echo "Thank you for using Ruutu+ lataaja!"
 ' show some info of the media after ffmpeg has finished? with ffmpeg or mediainfo?  TODO - version 0.3
 
